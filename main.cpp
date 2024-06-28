@@ -1182,7 +1182,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 
 	// モデル読み込み
-	ModelData modelData = LoadObjFile("resource", "plane.obj");
+	ModelData modelData = LoadObjFile("resource", "fence.obj");
 
 
 	// Textureを読んで転送する
@@ -1232,7 +1232,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		kCountOfBlendMode,
 	};
 
-	BlendMode BM = kBlendModeAdd;
+	BlendMode BM = kBlendModeNone;
 
 	// BlendStateの設定
 	D3D12_BLEND_DESC blendDesc{};
