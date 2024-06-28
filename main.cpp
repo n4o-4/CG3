@@ -1182,7 +1182,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 
 	// モデル読み込み
-	ModelData modelData = LoadObjFile("resource", "axis.obj");
+	ModelData modelData = LoadObjFile("resource", "plane.obj");
 
 
 	// Textureを読んで転送する
@@ -1239,11 +1239,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	// すべての要素数を書き込む
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-	/*blendDesc.RenderTarget[0].BlendEnable = TRUE;
+	blendDesc.RenderTarget[0].BlendEnable = TRUE;
 
-	blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	/*blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 	blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-	blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;*/
 
 	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
 	blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
@@ -1280,7 +1280,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_INV_DEST_COLOR;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
-	}*/
+	}
 
 	// RasiterzerStateの設定
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
@@ -1652,6 +1652,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			
 			
 			//ImGui::InputFloat3("a", &worldMatrix.m[3][0]);
+			Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
+			Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
+			Matrix4x4 viewMatrix = Inverse(cameraMatrix);
+			Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(kClientWidth) / float(kClientHeight), 0.1f, 100.0f);
+			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
+			wvpData->WVP = worldViewProjectionMatrix;
+			wvpData->World = worldMatrix;
+
 
 			// Sprite用のWorldViewprojectionMatrixを作る
 			//Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transformSprite.scale, transformSprite.rotate, transformSprite.translate);
